@@ -1,8 +1,13 @@
 using Haiku.Bot;
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+var builder = Host.CreateDefaultBuilder(args);
+
+var host = builder
+    .ConfigureServices((context, services) =>
     {
+        services.AddConfiguration(context.Configuration);
+
+
         services.AddHostedService<Worker>();
     })
     .Build();
