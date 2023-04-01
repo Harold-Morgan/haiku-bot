@@ -4,8 +4,6 @@ using Telegram.Bot;
 using Microsoft.Extensions.Options;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types;
-using System;
 using Haiku.Bot.Handlers;
 
 public class TelegramWorker : BackgroundService
@@ -31,7 +29,7 @@ public class TelegramWorker : BackgroundService
         {
             AllowedUpdates = new UpdateType[]{
                 UpdateType.Message
-            }
+            },
         };
 
         _client.StartReceiving(
