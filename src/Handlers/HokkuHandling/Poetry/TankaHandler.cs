@@ -1,9 +1,9 @@
 using System.Text;
 
-public static class HokkuHandler
+class TankaHandler
 {
-    // 17 слогов + пробелы = 34 - последний пробел
-    public static bool TooShortForHokku(int charLength) => charLength < 33;
+    // 31 слог + пробелы = 62 - последний пробел
+    public static bool TooShortForTanka(int charLength) => charLength < 61;
 
     public static bool TryFormPoetry(string[] words, out string? poetry)
     {
@@ -28,6 +28,18 @@ public static class HokkuHandler
 
         sb.Append(thirdLine).Append(Environment.NewLine);
         words = words.Skip(thirdOffset).ToArray();
+
+        if (!GrammarHelper.TryExtractLine(words, 7, out var fourthLine, out var fourthOffset))
+            return false;
+
+        sb.Append(fourthLine).Append(Environment.NewLine);
+        words = words.Skip(fourthOffset).ToArray();
+
+        if (!GrammarHelper.TryExtractLine(words, 7, out var fithLine, out var fithOffset))
+            return false;
+
+        sb.Append(fithLine).Append(Environment.NewLine);
+        words = words.Skip(fithOffset).ToArray();
 
         poetry = sb.ToString();
 
