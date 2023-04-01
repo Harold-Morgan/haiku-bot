@@ -1,6 +1,6 @@
 using System.Text;
 
-class TankaHandler
+public class TankaHandler
 {
     // 31 слог + пробелы = 62 - последний пробел
     public static bool TooShortForTanka(int charLength) => charLength < 61;

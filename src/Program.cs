@@ -27,6 +27,8 @@ internal class Program
                 })
                 .Build();
 
+            host.Services.ValidateCongifuration();
+
             host.Run();
         }
         catch (Exception ex)
