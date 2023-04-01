@@ -15,13 +15,13 @@ public class MainHandler
 {
     private readonly ILogger<TelegramWorker> _logger;
     private readonly CommandHandler _commandHadnler;
-    private readonly HokkuHandler _hokkuHandler;
+    private readonly PoetryHandler _poetryHandler;
 
-    public MainHandler(ILogger<TelegramWorker> logger, CommandHandler commandHandler, HokkuHandler hokkuHandler)
+    public MainHandler(ILogger<TelegramWorker> logger, CommandHandler commandHandler, PoetryHandler hokkuHandler)
     {
         _logger = logger;
         _commandHadnler = commandHandler;
-        _hokkuHandler = hokkuHandler;
+        _poetryHandler = hokkuHandler;
     }
 
 
@@ -60,7 +60,7 @@ public class MainHandler
         if (text.StartsWith('/'))
             reply = _commandHadnler.ParseCommand(text);
         else
-            reply = _hokkuHandler.Handle(text);
+            reply = _poetryHandler.Handle(text);
 
 
         if (string.IsNullOrEmpty(reply))

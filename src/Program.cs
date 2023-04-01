@@ -43,7 +43,7 @@ internal class Program
     {
         services.AddSingleton<MainHandler>();
         services.AddSingleton<CommandHandler>();
-        services.AddSingleton<HokkuHandler>();
+        services.AddSingleton<PoetryHandler>();
 
         services.AddHostedService<TelegramWorker>();
 
