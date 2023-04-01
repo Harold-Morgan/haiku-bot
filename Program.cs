@@ -1,15 +1,30 @@
-using Haiku.Bot;
+using Haiku.Bot.Handlers;
+using Haiku.Bot.Services;
 
-var builder = Host.CreateDefaultBuilder(args);
-
-var host = builder
-    .ConfigureServices((context, services) =>
+internal class Program
+{
+    private static void Main(string[] args)
     {
-        services.AddConfiguration(context.Configuration);
+        var builder = Host.CreateDefaultBuilder(args);
 
+        var host = builder
+            .ConfigureServices((context, services) =>
+            {
+                services.AddConfiguration(context.Configuration);
 
-        services.AddHostedService<Worker>();
-    })
-    .Build();
+                AddServices(services);
+            })
+            .Build();
 
-host.Run();
+        host.Run();
+    }
+
+    private static IServiceCollection AddServices(IServiceCollection services)
+    {
+        services.AddSingleton<MainHandler>();
+
+        services.AddHostedService<TelegramWorker>();
+
+        return services;
+    }
+}
