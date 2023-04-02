@@ -33,6 +33,7 @@ jobs:
       - name: Stop
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          whoami
           systemctl --user stop haiku_bot.service
 
       - name: Publish
