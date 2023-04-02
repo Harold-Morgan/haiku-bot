@@ -34,7 +34,7 @@ jobs:
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
           whoami
-          systemctl --user stop haiku_bot.service
+          systemctl stop haiku_bot.service
 
       - name: Publish
         run: dotnet publish -c Release -o /home/egor/bots/haiku_bot
@@ -42,5 +42,5 @@ jobs:
       - name: Restart the app
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
-          systemctl --user start haiku_bot.service
+          systemctl start haiku_bot.service
 
