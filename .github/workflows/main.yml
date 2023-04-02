@@ -37,5 +37,5 @@ jobs:
       - name: Restart the app
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
-          systemctl restart haiku_bot.service
+          systemctl --user restart haiku_bot.service
 
