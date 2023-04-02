@@ -43,9 +43,11 @@ internal class Program
 
     private static IServiceCollection AddServices(IServiceCollection services)
     {
-        services.AddSingleton<MainHandler>();
-        services.AddSingleton<CommandHandler>();
-        services.AddSingleton<PoetryHandler>();
+        services.AddScoped<MainHandler>();
+        services.AddScoped<CommandHandler>();
+
+        services.AddTransient<PoetryHandler>();
+        services.AddTransient<PrefixService>();
 
         services.AddHostedService<TelegramWorker>();
 

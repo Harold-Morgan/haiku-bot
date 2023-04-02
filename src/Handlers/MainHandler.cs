@@ -2,7 +2,6 @@
 using Telegram.Bot;
 using Haiku.Bot.Services;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Exceptions;
 
 namespace Haiku.Bot.Handlers;
 
@@ -66,17 +65,5 @@ public class MainHandler
             chatId: chatId,
             text: reply,
             cancellationToken: token);
-    }
-
-    public async Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)
-    {
-        var error = exception switch
-        {
-            ApiRequestException apiRequestException
-                => $"Telegram API Error: [{apiRequestException.ErrorCode}] {apiRequestException.Message}",
-            _ => exception.ToString()
-        };
-
-        _logger.LogError(error);
     }
 }

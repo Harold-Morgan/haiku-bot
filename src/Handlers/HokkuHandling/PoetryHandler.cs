@@ -2,9 +2,17 @@ using System.Text;
 
 public class PoetryHandler
 {
-    internal string? Handle(string input)
+    private readonly PrefixService _prefixer;
+
+    public PoetryHandler(PrefixService prefix)
     {
-        var words = input.Split(' ')
+        _prefixer = prefix;
+    }
+
+    public string? Handle(string input)
+    {
+        var words = input
+            .Split(new string[] { "\r\n", "\r", "\n", " " }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .Select(word => word.Trim())
             .Where(word => !string.IsNullOrEmpty(word))
             .ToArray();
@@ -13,7 +21,9 @@ public class PoetryHandler
 
         if (!HokkuHandler.TooShortForHokku(input.Length) && HokkuHandler.TryFormPoetry(words, out var hokku))
         {
-            answerBuilder.Append("Я сформировал Хокку: ");
+            answerBuilder.Append(_prefixer.TryAddPrefix());
+
+            answerBuilder.Append("Найдено Хокку: ");
             answerBuilder.Append(Environment.NewLine);
             answerBuilder.Append(Environment.NewLine);
             answerBuilder.Append(hokku);
@@ -22,7 +32,9 @@ public class PoetryHandler
 
         if (!TankaHandler.TooShortForTanka(input.Length) && TankaHandler.TryFormPoetry(words, out var tanka))
         {
-            answerBuilder.Append("А ещё тут есть Танка: ");
+            answerBuilder.Append(_prefixer.TryAddPrefix());
+
+            answerBuilder.Append("Найдена Танка: ");
             answerBuilder.Append(Environment.NewLine);
             answerBuilder.Append(Environment.NewLine);
             answerBuilder.Append(tanka);
