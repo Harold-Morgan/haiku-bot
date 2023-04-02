@@ -31,7 +31,9 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Stop
-        run: systemctl --user stop haiku_bot.service
+        run: |
+          export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          systemctl --user stop haiku_bot.service
 
       - name: Publish
         run: dotnet publish -c Release -o /home/egor/bots/haiku_bot
