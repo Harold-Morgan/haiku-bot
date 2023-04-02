@@ -30,12 +30,14 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      # We will output publish files to the folder we previously created
+      - name: Stop
+        run: systemctl --user stop haiku_bot.service
+
       - name: Publish
         run: dotnet publish -c Release -o /home/egor/bots/haiku_bot
         
       - name: Restart the app
         run: |
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
-          systemctl --user restart haiku_bot.service
+          systemctl --user start haiku_bot.service
 
