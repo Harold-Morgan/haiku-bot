@@ -65,6 +65,6 @@ public class MainHandler
             chatId: chatId,
             text: reply,
             cancellationToken: token,
-            parseMode: ParseMode.MarkdownV2);
+            parseMode: ParseMode.Html);
     }
 }
