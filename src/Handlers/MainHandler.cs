@@ -64,6 +64,7 @@ public class MainHandler
         await client.SendTextMessageAsync(
             chatId: chatId,
             text: reply,
-            cancellationToken: token);
+            cancellationToken: token,
+            parseMode: ParseMode.MarkdownV2);
     }
 }
