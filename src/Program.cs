@@ -1,3 +1,4 @@
+using System.Reflection;
 using Haiku.Bot.Handlers;
 using Haiku.Bot.Services;
 using Serilog;
@@ -44,12 +45,25 @@ internal class Program
     private static IServiceCollection AddServices(IServiceCollection services)
     {
         services.AddScoped<MainHandler>();
+
+        AddCommands(services);
         services.AddScoped<CommandHandler>();
 
         services.AddTransient<PoetryHandler>();
         services.AddTransient<PrefixService>();
 
         services.AddHostedService<TelegramWorker>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddCommands(IServiceCollection services)
+    {
+        services.Scan(
+            scan => scan.FromAssemblyOf<ICommand>()
+                .AddClasses(classes => classes.AssignableTo<ICommand>())
+                    .As<ICommand>()
+                    .WithScopedLifetime());
 
         return services;
     }

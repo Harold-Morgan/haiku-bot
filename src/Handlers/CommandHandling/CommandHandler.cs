@@ -1,16 +1,22 @@
 public class CommandHandler
 {
-    internal string ParseCommand(string input)
+    private readonly IEnumerable<ICommand> _commands;
+
+    public CommandHandler(IEnumerable<ICommand> commands)
     {
-        var command = string.Empty;
+        _commands = commands;
+    }
 
-        string result = input switch
-        {
-            "/help" => Help.CommandHandler(),
+    internal string? ParseCommand(string input)
+    {
+        var commandName = input[1..].ToLower();
 
-            _ => "Команда не распознана"
-        };
+        var command = _commands.Single(x => x.GetType().Name.ToLower() == commandName);
 
+        if (commandName == "help")
+            return command.HandleCommand(_commands.Select(x => x.GetType().Name.ToLower()).ToArray());
+
+        var result = command.HandleCommand();
 
         return result;
     }
