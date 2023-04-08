@@ -1,7 +1,9 @@
 using System.Reflection;
 using Haiku.Bot.Handlers;
 using Haiku.Bot.Services;
+using Microsoft.Extensions.Options;
 using Serilog;
+using Telegram.Bot;
 
 internal class Program
 {
@@ -53,6 +55,14 @@ internal class Program
         services.AddTransient<PrefixService>();
 
         services.AddHostedService<TelegramWorker>();
+
+        services.AddHttpClient("telegram_bot_client")
+            .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
+            {
+                var botConfig = sp.GetRequiredService<IOptions<TelegramSettings>>();
+                TelegramBotClientOptions options = new(botConfig.Value.Token);
+                return new TelegramBotClient(options, httpClient);
+            });
 
         return services;
     }

@@ -1,4 +1,6 @@
+using Haiku.Bot.Handlers.CommandHandling;
+
 public interface ICommand
 {
-    public string HandleCommand(params string[] parameters);
+    public Task HandleCommand(CommandParameters @params, CancellationToken token = new());
 }

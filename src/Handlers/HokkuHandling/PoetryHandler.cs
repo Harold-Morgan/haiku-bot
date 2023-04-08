@@ -1,15 +1,21 @@
+using Newtonsoft.Json.Linq;
 using System.Text;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 public class PoetryHandler
 {
     private readonly PrefixService _prefixer;
+    private readonly ITelegramBotClient _botClient;
 
-    public PoetryHandler(PrefixService prefix)
+    public PoetryHandler(PrefixService prefix, ITelegramBotClient botClient)
     {
         _prefixer = prefix;
+        _botClient = botClient;
     }
 
-    public string? Handle(string input)
+    public async Task Handle(Update update, string input, CancellationToken token)
     {
         var words = input
             .Split(new string[] { "\r\n", "\r", "\n", " " }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
@@ -17,30 +23,41 @@ public class PoetryHandler
             .Where(word => !string.IsNullOrEmpty(word))
             .ToArray();
 
-        var answerBuilder = new StringBuilder();
+        var responseBuilder = new StringBuilder();
 
         if (!HokkuHandler.TooShortForHokku(input.Length) && HokkuHandler.TryFormPoetry(words, out var hokku))
         {
-            answerBuilder.Append(_prefixer.TryAddPrefix());
+            responseBuilder.Append(_prefixer.TryAddPrefix());
 
-            answerBuilder.Append("Найдено Хокку: ");
-            answerBuilder.Append(Environment.NewLine);
-            answerBuilder.Append(Environment.NewLine);
-            answerBuilder.Append(hokku);
-            answerBuilder.Append(Environment.NewLine);
+            responseBuilder.Append("Найдено Хокку: ");
+            responseBuilder.Append(Environment.NewLine);
+            responseBuilder.Append(Environment.NewLine);
+            responseBuilder.Append(hokku);
+            responseBuilder.Append(Environment.NewLine);
         }
 
         if (!TankaHandler.TooShortForTanka(input.Length) && TankaHandler.TryFormPoetry(words, out var tanka))
         {
-            answerBuilder.Append(_prefixer.TryAddPrefix());
+            responseBuilder.Append(_prefixer.TryAddPrefix());
 
-            answerBuilder.Append("Найдена Танка: ");
-            answerBuilder.Append(Environment.NewLine);
-            answerBuilder.Append(Environment.NewLine);
-            answerBuilder.Append(tanka);
-            answerBuilder.Append(Environment.NewLine);
+            responseBuilder.Append("Найдена Танка: ");
+            responseBuilder.Append(Environment.NewLine);
+            responseBuilder.Append(Environment.NewLine);
+            responseBuilder.Append(tanka);
+            responseBuilder.Append(Environment.NewLine);
         }
 
-        return answerBuilder.ToString();
+        var response =  responseBuilder.ToString();
+
+        if (string.IsNullOrEmpty(response))
+            return;
+
+        var message = update.Message!;
+
+        await _botClient.SendTextMessageAsync(
+            chatId: message.Chat.Id,
+            text: response,
+            cancellationToken: token,
+            parseMode: ParseMode.Html);
     }
 }

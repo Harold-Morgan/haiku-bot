@@ -25,7 +25,7 @@ public class MainHandler
 
         try
         {
-            await HandleUpdateInternal(client, update, token);
+            await HandleUpdateInternal(update, token);
         }
         catch (Exception ex)
         {
@@ -33,7 +33,7 @@ public class MainHandler
         }
     }
 
-    private async Task HandleUpdateInternal(ITelegramBotClient client, Update update, CancellationToken token)
+    private async Task HandleUpdateInternal(Update update, CancellationToken token)
     {
         if (update.Type != UpdateType.Message && update.Type != UpdateType.EditedMessage)
             return;
@@ -50,21 +50,10 @@ public class MainHandler
 
         text = text.Trim();
 
-        var reply = string.Empty;
+
         if (text.StartsWith('/'))
-            reply = _commandHadnler.ParseCommand(text);
+            await _commandHadnler.ParseAndHandleCommand(update, text, token);
         else
-            reply = _poetryHandler.Handle(text);
-
-
-        if (string.IsNullOrEmpty(reply))
-            return;
-
-        var chatId = message.Chat.Id;
-        await client.SendTextMessageAsync(
-            chatId: chatId,
-            text: reply,
-            cancellationToken: token,
-            parseMode: ParseMode.Html);
+            await _poetryHandler.Handle(update, text, token);
     }
 }
