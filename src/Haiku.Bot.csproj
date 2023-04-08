@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-haiku_bot-fe3fed1f-0ff7-4b35-9b97-df57317c5919</UserSecretsId>
     <RootNamespace>Haiku.Bot</RootNamespace>
-    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
   <ItemGroup>
