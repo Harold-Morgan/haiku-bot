@@ -1,5 +1,6 @@
 ﻿using Haiku.Bot.Handlers;
 using Haiku.Bot.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
@@ -27,6 +28,8 @@ namespace Haiku.Bot.Startup
                     TelegramBotClientOptions options = new(botConfig.Value.Token);
                     return new TelegramBotClient(options, httpClient);
                 });
+
+            services.AddDbContext<HaikuDbContext>();
 
             return services;
         }

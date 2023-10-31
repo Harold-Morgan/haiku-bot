@@ -1,4 +1,5 @@
 using Haiku.Bot.Startup;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 internal class Program
@@ -28,6 +29,8 @@ internal class Program
 
             host.Services.ValidateCongifuration();
 
+            ApplyMigration(host);
+
             host.Run();
         }
         catch (Exception ex)
@@ -38,5 +41,13 @@ internal class Program
         {
             Log.CloseAndFlush();
         }
+    }
+
+    private static void ApplyMigration(IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+
+        var db = scope.ServiceProvider.GetRequiredService<HaikuDbContext>();
+        db.Database.Migrate();
     }
 }

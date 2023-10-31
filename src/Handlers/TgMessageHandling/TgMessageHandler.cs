@@ -16,8 +16,9 @@ public class TgMessageHandler
     public async Task HandleBotAdded(Update update, CancellationToken token)
     {
         var message = update.Message!;
+        var chat = message.Chat;
 
-        _logger.LogDebug($"Bot added to chat. ChatName: {message.Chat.Title} Id: {message.Chat.Id}");
+        _logger.LogDebug($"Bot added to chat. ChatName: {chat.Title} Id: {chat.Id}");
 
         await _botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
