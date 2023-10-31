@@ -1,6 +1,5 @@
 ﻿using Haiku.Bot.Handlers;
 using Haiku.Bot.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
@@ -20,6 +19,8 @@ namespace Haiku.Bot.Startup
             services.AddTransient<PrefixService>();
 
             services.AddHostedService<TelegramWorker>();
+
+            services.AddSingleton<GlobalContext>();
 
             services.AddHttpClient("telegram_bot_client")
                 .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>

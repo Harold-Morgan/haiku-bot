@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-class HaikuDbContext : DbContext
+public class HaikuDbContext : DbContext
 {
     private DbSettings _settings;
 

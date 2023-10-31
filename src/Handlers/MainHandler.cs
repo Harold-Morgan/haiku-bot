@@ -1,6 +1,4 @@
 ﻿using Telegram.Bot.Types;
-using Telegram.Bot;
-using Haiku.Bot.Services;
 using Telegram.Bot.Types.Enums;
 
 namespace Haiku.Bot.Handlers;
@@ -22,7 +20,6 @@ public class MainHandler
         _commandHadnler = commandHandler;
         _poetryHandler = hokkuHandler;
     }
-
 
     public async Task HandleUpdateAsync(Update update, CancellationToken token)
     {
@@ -54,6 +51,12 @@ public class MainHandler
             return;
         }
 
+        if (message.Type == MessageType.ChatMemberLeft)
+        {
+            await _tgMessageHandler.BotDeleted(update, token);
+            return;
+        }
+
         if (message.Type != MessageType.Text)
             return;
 
@@ -63,7 +66,6 @@ public class MainHandler
             return;
 
         text = text.Trim();
-
 
         if (text.StartsWith('/'))
             await _commandHadnler.ParseAndHandleCommand(update, text, token);

@@ -12,22 +12,27 @@ public class TelegramWorker : BackgroundService
     private readonly ILogger<TelegramWorker> _logger;
     private readonly TelegramBotClient _client;
     private readonly IServiceProvider _serviceProvider;
+    private readonly GlobalContext _globalContext;
 
 
     public TelegramWorker(ILogger<TelegramWorker> logger,
       IOptions<TelegramSettings> settings,
-      IServiceProvider serviceProvider)
+      IServiceProvider serviceProvider,
+      GlobalContext globalContext)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
 
         _client = new TelegramBotClient(settings.Value.Token);
+        _globalContext = globalContext;
     }
 
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
         var info = await _client.GetMeAsync();
         _logger.LogInformation($"Client connected. Username: {info.Username} Id: {info.Id}");
+
+        _globalContext.BotInfo = info;
 
         var receiverOptions = new ReceiverOptions()
         {

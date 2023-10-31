@@ -21,7 +21,7 @@ namespace Haiku.Bot.Migrations
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
                     BotAdded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    BotDeleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    BotDeleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

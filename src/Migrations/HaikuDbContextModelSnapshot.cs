@@ -32,7 +32,7 @@ namespace Haiku.Bot.Migrations
                     b.Property<DateTime>("BotAdded")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("BotDeleted")
+                    b.Property<DateTime?>("BotDeleted")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")

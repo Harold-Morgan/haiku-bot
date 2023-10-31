@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Haiku.Bot.Migrations
 {
     [DbContext(typeof(HaikuDbContext))]
-    [Migration("20231031144940_InitialCreate")]
+    [Migration("20231031182606_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -35,7 +35,7 @@ namespace Haiku.Bot.Migrations
                     b.Property<DateTime>("BotAdded")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("BotDeleted")
+                    b.Property<DateTime?>("BotDeleted")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
