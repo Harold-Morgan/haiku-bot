@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -22,8 +23,10 @@ public class TgMessageHandler
         var message = update.Message!;
         var chat = message.Chat;
 
-        _logger.LogDebug($"Bot added to chat. ChatName: {chat.Title} Id: {chat.Id}");
+        if (message.NewChatMembers!.All(x => x.Id != _globalContext.BotInfo.Id))
+            return;
 
+        _logger.LogDebug($"Bot added to chat. ChatName: {chat.Title} Id: {chat.Id}");
 
         var chatEntry = _dbContext.Chats.FirstOrDefault(x => x.ChatId == chat.Id);
         if (chatEntry == null)
@@ -43,8 +46,7 @@ public class TgMessageHandler
             chatEntry.BotDeleted = null;
         }
 
-
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
 
         await _botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
@@ -78,6 +80,6 @@ public class TgMessageHandler
         else
             chatEntry.BotDeleted = message.Date;
 
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(token);
     }
 }

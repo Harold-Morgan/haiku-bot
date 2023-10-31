@@ -7,6 +7,10 @@ public class HaikuDbContext : DbContext
 
     public DbSet<Chat> Chats { get; set; }
 
+    public DbSet<TelegramUser> TelegramUsers { get; set; }
+
+    public DbSet<Poetry> Poetries { get; set; }
+
     public HaikuDbContext(IOptions<DbSettings> settings)
     {
         _settings = settings.Value;

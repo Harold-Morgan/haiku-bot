@@ -57,7 +57,7 @@ public class TelegramWorker : BackgroundService
         );
     }
 
-    private async Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)
+    private void HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)
     {
         var error = exception switch
         {

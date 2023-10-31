@@ -7,15 +7,20 @@ public class PoetryHandler
 {
     private readonly PrefixService _prefixer;
     private readonly ITelegramBotClient _botClient;
+    private readonly DbService _dbService;
 
-    public PoetryHandler(PrefixService prefix, ITelegramBotClient botClient)
+    public PoetryHandler(PrefixService prefix, ITelegramBotClient botClient, DbService dbService)
     {
         _prefixer = prefix;
         _botClient = botClient;
+        _dbService = dbService;
     }
 
     public async Task Handle(Update update, string input, CancellationToken token)
     {
+        var user = update.Message?.From ?? update.EditedMessage!.From;
+        await _dbService.TryAddUser(user, token);
+
         var words = input
             .Split(new string[] { "\r\n", "\r", "\n", " " }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .Select(word => word.Trim())
@@ -33,6 +38,8 @@ public class PoetryHandler
             responseBuilder.Append(Environment.NewLine);
             responseBuilder.Append(hokku);
             responseBuilder.Append(Environment.NewLine);
+
+            await _dbService.AddPoetry(update, "Hokku", hokku!, token);
         }
 
         if (!TankaHandler.TooShortForTanka(input.Length) && TankaHandler.TryFormPoetry(words, out var tanka))
@@ -44,9 +51,11 @@ public class PoetryHandler
             responseBuilder.Append(Environment.NewLine);
             responseBuilder.Append(tanka);
             responseBuilder.Append(Environment.NewLine);
+
+            await _dbService.AddPoetry(update, "Tanka", tanka!, token);
         }
 
-        var response =  responseBuilder.ToString();
+        var response = responseBuilder.ToString();
 
         if (string.IsNullOrEmpty(response))
             return;

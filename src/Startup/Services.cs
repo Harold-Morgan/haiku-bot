@@ -14,6 +14,7 @@ namespace Haiku.Bot.Startup
             services.AddCommands();
             services.AddScoped<CommandHandler>();
             services.AddScoped<TgMessageHandler>();
+            services.AddScoped<DbService>();
 
             services.AddTransient<PoetryHandler>();
             services.AddTransient<PrefixService>();
