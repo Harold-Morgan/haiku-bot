@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Types;

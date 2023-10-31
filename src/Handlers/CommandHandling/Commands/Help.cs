@@ -1,7 +1,6 @@
 using Haiku.Bot.Handlers.CommandHandling;
 using System.Text;
 using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
 
 class Help : ICommand
 {

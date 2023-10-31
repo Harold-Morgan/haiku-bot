@@ -13,7 +13,6 @@ public class PrefixService
 
     private bool PrefixExists;
 
-
     public PrefixService()
     {
         PrefixExists = false;

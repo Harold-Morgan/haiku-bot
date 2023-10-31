@@ -8,6 +8,6 @@ public class TelegramSettings
     public void Validate()
     {
         if (Token == null)
-            throw new NullReferenceException("Settings token is null");
+            throw new NullReferenceException("Settings parameter Telegram:Token is null");
     }
 }

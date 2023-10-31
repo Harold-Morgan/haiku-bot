@@ -1,5 +1,4 @@
 using Haiku.Bot.Handlers.CommandHandling;
-using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 

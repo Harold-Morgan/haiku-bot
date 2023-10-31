@@ -6,12 +6,18 @@ public static class Configuration
     {
         services.AddOptions();
 
-        services.AddOptions<TelegramSettings>()
-            .Bind(configuration.GetSection(nameof(TelegramSettings)))
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+        services.AddConfig<TelegramSettings>(configuration);
 
         return services;
+    }
+
+    private static void AddConfig<T>(this IServiceCollection services, IConfiguration configuration) where T : class
+    {
+        services
+            .AddOptions<T>()
+            .Bind(configuration.GetSection(typeof(T).Name))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
     }
 
     public static IServiceProvider ValidateCongifuration(this IServiceProvider provider)
