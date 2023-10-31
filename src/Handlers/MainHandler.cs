@@ -7,19 +7,24 @@ namespace Haiku.Bot.Handlers;
 
 public class MainHandler
 {
-    private readonly ILogger<TelegramWorker> _logger;
+    private readonly ILogger<MainHandler> _logger;
     private readonly CommandHandler _commandHadnler;
     private readonly PoetryHandler _poetryHandler;
+    private readonly TgMessageHandler _tgMessageHandler;
 
-    public MainHandler(ILogger<TelegramWorker> logger, CommandHandler commandHandler, PoetryHandler hokkuHandler)
+    public MainHandler(ILogger<MainHandler> logger,
+     CommandHandler commandHandler,
+     PoetryHandler hokkuHandler,
+     TgMessageHandler tgMessageHandler)
     {
+        _tgMessageHandler = tgMessageHandler;
         _logger = logger;
         _commandHadnler = commandHandler;
         _poetryHandler = hokkuHandler;
     }
 
 
-    public async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
+    public async Task HandleUpdateAsync(Update update, CancellationToken token)
     {
         _logger.LogInformation("Update recieved");
 
@@ -40,7 +45,16 @@ public class MainHandler
 
         var message = update.Message;
 
-        if (message == null || message.Type != MessageType.Text)
+        if (message == null)
+            return;
+
+        if (message.Type == MessageType.ChatMembersAdded)
+        {
+            await _tgMessageHandler.HandleBotAdded(update, token);
+            return;
+        }
+
+        if (message.Type != MessageType.Text)
             return;
 
         var text = message.Text;

@@ -43,7 +43,7 @@ public class TelegramWorker : BackgroundService
                 {
                     var handler = scope.ServiceProvider.GetRequiredService<MainHandler>();
 
-                    await handler.HandleUpdateAsync(client, update, token);
+                    await handler.HandleUpdateAsync(update, token);
                 }
             },
             pollingErrorHandler: HandlePollingErrorAsync,

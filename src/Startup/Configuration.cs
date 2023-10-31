@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 public static class Configuration
@@ -7,6 +8,8 @@ public static class Configuration
         services.AddOptions();
 
         services.AddConfig<TelegramSettings>(configuration);
+
+        services.AddConfig<DbSettings>(configuration);
 
         return services;
     }
@@ -24,6 +27,7 @@ public static class Configuration
     {
         // Форсит резолв Options инстансов из контейнера для их валидации. Потому что ValidateOnStart иначе не пашет.
         _ = provider.GetRequiredService<IOptions<TelegramSettings>>().Value;
+        _ = provider.GetRequiredService<IOptions<DbSettings>>().Value;
 
         return provider;
     }

@@ -13,11 +13,13 @@ namespace Haiku.Bot.Startup
 
             services.AddCommands();
             services.AddScoped<CommandHandler>();
+            services.AddScoped<TgMessageHandler>();
 
             services.AddTransient<PoetryHandler>();
             services.AddTransient<PrefixService>();
 
             services.AddHostedService<TelegramWorker>();
+
             services.AddHttpClient("telegram_bot_client")
                 .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
                 {

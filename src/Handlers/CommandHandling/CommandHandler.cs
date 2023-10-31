@@ -15,24 +15,31 @@ public class CommandHandler
     {
         var (command, commandName) = Parse(input);
 
-        var commandParams = new CommandParameters 
-        { 
-            Update = update 
+        var commandParams = new CommandParameters
+        {
+            Update = update
         };
+
+        if (command == null)
+            return;
 
         if (commandName == "help")
         {
             commandParams.TextParams = _commands.Select(x => x.GetType().Name.ToLower()).ToArray();
-        }    
-            
+        }
+
         await command.HandleCommand(commandParams, token);
     }
 
-    private (ICommand, string) Parse(string input)
+    private (ICommand?, string) Parse(string input)
     {
         var commandName = input[1..].ToLower();
 
-        var command = _commands.Single(x => x.GetType().Name.ToLower() == commandName);
+        //remove /help@SamuraichBot postfix that tg adds
+        if (commandName.Contains('@'))
+            commandName = commandName.Split('@')[0];
+
+        var command = _commands.SingleOrDefault(x => x.GetType().Name.ToLower() == commandName);
 
         return (command, commandName);
     }
