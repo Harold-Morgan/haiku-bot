@@ -11,6 +11,8 @@ class Help : ICommand
         _botClient = botClient;
     }
 
+    public string Description => "Помочь разобраться с командами";
+
     public async Task HandleCommand(CommandParameters @params, CancellationToken token = default)
     {
         var sb = new StringBuilder();
@@ -21,6 +23,7 @@ class Help : ICommand
         {
             sb.Append("/");
             sb.Append(command);
+            sb.Append(Environment.NewLine);
             sb.Append(Environment.NewLine);
         }
 

@@ -6,7 +6,7 @@ public class CommandHandler
 {
     private readonly IEnumerable<ICommand> _commands;
 
-    public CommandHandler(IEnumerable<ICommand> commands, ITelegramBotClient _telegramClient)
+    public CommandHandler(IEnumerable<ICommand> commands)
     {
         _commands = commands;
     }
@@ -24,16 +24,17 @@ public class CommandHandler
             return;
 
         if (commandName == "help")
-        {
-            commandParams.TextParams = _commands.Select(x => x.GetType().Name.ToLower()).ToArray();
-        }
+            commandParams.TextParams = _commands.Select(x => x.GetType().Name.ToLower() + " - " + x.Description).ToArray();
+        else
+            commandParams.TextParams = input.Split(' ')[1..];
 
         await command.HandleCommand(commandParams, token);
     }
 
     private (ICommand?, string) Parse(string input)
     {
-        var commandName = input[1..].ToLower();
+        var commandRaw = input[1..].ToLower();
+        var commandName = commandRaw.Split(' ')[0];
 
         //remove /help@SamuraichBot postfix that tg adds
         if (commandName.Contains('@'))
