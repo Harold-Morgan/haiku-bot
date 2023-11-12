@@ -65,7 +65,7 @@ public class DbService
 
     public async Task<UserStat[]> GetStats(long chatId, DateTime startTime, DateTime endTime, CancellationToken token)
     {
-        var stats = _dbContext.Poetries
+        var stats = await _dbContext.Poetries
         .AsNoTracking()
         .Where(x => x.ChatId == chatId && x.CreationDate >= startTime.ToUniversalTime() && x.CreationDate <= endTime.ToUniversalTime())
         .GroupBy(y => y.TelegramUser)
@@ -76,7 +76,7 @@ public class DbService
         })
         .OrderByDescending(x => x.Count)
         .Take(10)
-        .ToArray();
+        .ToArrayAsync();
 
         return stats;
     }
