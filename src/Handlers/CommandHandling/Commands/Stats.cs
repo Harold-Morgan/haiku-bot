@@ -14,6 +14,12 @@ public class Stats : ICommand
         _dbService = dbService;
     }
 
+    public string Description => "Показать статистику пользователей в текущем чате. "
+    + Environment.NewLine
+    + "Можно уточнить интервал: {/stats 14.11.2023 15.11.2023}. "
+    + Environment.NewLine
+    + "Интервал по умолчанию - месяц. ";
+
     public async Task HandleCommand(CommandParameters @params, CancellationToken token = default)
     {
         var update = @params.Update;
@@ -44,13 +50,15 @@ public class Stats : ICommand
         var now = DateTime.Now;
         var defaultStartDate = new DateTime(now.Year, now.Month, 1);
         var defaultEndDate = defaultStartDate.AddMonths(1).AddDays(-1);
+        //including last date of the month
+        defaultEndDate.AddHours(23).AddMinutes(59).AddSeconds(59);
 
         if (commandParams == null || commandParams.Length != 2)
             return (defaultStartDate, defaultEndDate);
 
-        if (!DateTime.TryParse(commandParams[0], out var startDate) || !DateTime.TryParse(commandParams[1], out var endDate))
+        if (!DateOnly.TryParse(commandParams[0], out var startDate) || !DateOnly.TryParse(commandParams[1], out var endDate))
             return (defaultStartDate, defaultEndDate);
 
-        return (startDate, endDate);
+        return (startDate.ToDateTime(new TimeOnly(00, 00, 00)), endDate.ToDateTime(new TimeOnly(23, 59, 59)));
     }
 }

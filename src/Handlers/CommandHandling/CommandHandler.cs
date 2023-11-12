@@ -24,7 +24,7 @@ public class CommandHandler
             return;
 
         if (commandName == "help")
-            commandParams.TextParams = _commands.Select(x => x.GetType().Name.ToLower()).ToArray();
+            commandParams.TextParams = _commands.Select(x => x.GetType().Name.ToLower() + " - " + x.Description).ToArray();
         else
             commandParams.TextParams = input.Split(' ')[1..];
 
@@ -33,7 +33,8 @@ public class CommandHandler
 
     private (ICommand?, string) Parse(string input)
     {
-        var commandName = input[1..].ToLower();
+        var commandRaw = input[1..].ToLower();
+        var commandName = commandRaw.Split(' ')[0];
 
         //remove /help@SamuraichBot postfix that tg adds
         if (commandName.Contains('@'))

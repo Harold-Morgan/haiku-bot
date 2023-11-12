@@ -11,6 +11,8 @@ public class About : ICommand
         _botClient = botClient;
     }
 
+    public string Description => "Рассказать о себе";
+
     public async Task HandleCommand(CommandParameters @params, CancellationToken token = default)
     {
         var response = "Я - бот распознающий хокку и танка во введенных пользователями в чатах (или написанных лично мне) сообщениях. " +
