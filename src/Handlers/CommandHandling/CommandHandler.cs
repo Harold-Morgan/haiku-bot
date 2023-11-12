@@ -6,7 +6,7 @@ public class CommandHandler
 {
     private readonly IEnumerable<ICommand> _commands;
 
-    public CommandHandler(IEnumerable<ICommand> commands, ITelegramBotClient _telegramClient)
+    public CommandHandler(IEnumerable<ICommand> commands)
     {
         _commands = commands;
     }
@@ -24,9 +24,9 @@ public class CommandHandler
             return;
 
         if (commandName == "help")
-        {
             commandParams.TextParams = _commands.Select(x => x.GetType().Name.ToLower()).ToArray();
-        }
+        else
+            commandParams.TextParams = input.Split(' ')[1..];
 
         await command.HandleCommand(commandParams, token);
     }
