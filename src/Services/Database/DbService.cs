@@ -62,22 +62,4 @@ public class DbService
 
         await _dbContext.SaveChangesAsync();
     }
-
-    public async Task<UserStat[]> GetStats(long chatId, DateTime startTime, DateTime endTime, CancellationToken token)
-    {
-        var stats = _dbContext.Poetries
-        .AsNoTracking()
-        .Where(x => x.ChatId == chatId && x.CreationDate >= startTime.ToUniversalTime() && x.CreationDate <= endTime.ToUniversalTime())
-        .GroupBy(y => y.TelegramUser)
-        .Select(group => new UserStat
-        {
-            User = group.Key,
-            Count = group.Count()
-        })
-        .OrderByDescending(x => x.Count)
-        .Take(10)
-        .ToArray();
-
-        return stats;
-    }
 }
